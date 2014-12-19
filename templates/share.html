@@ -1,0 +1,62 @@
+{% extends "index.html" %}
+{% block title %}
+    <title> TianJun's Share </title>
+{% endblock %}
+
+{% block menu_share %}
+    <li class="current"><a href="/share/">Share</a></li>
+{% endblock %}
+
+{% block sidebar_container %}
+    {#    Todo: add my xiami here#}
+    <div id="sidebar_container">
+        <a href="http://www.douban.com/people/42583254/" align="middle">我的推荐~~~</a>
+        <script type="text/javascript"
+                src="http://www.douban.com/service/badge/42583254/?selection=random&amp;picsize=medium&amp;hideself=on&amp;show=collection&amp;n=16&amp;cat=drama%7Cmovie%7Cbook%7Cmusic&amp;columns=2"></script>
+        <iframe width="100%" height="550" class="share_self" frameborder="0" scrolling="no"
+                src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=300&skin=5&isTitle=0&noborder=1&isWeibo=1&isFans=1&uid=2454808194&verifier=92a06e51&dpc=1"></iframe>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    {% for share in shares %}
+        <div class="weibo">
+            <p style="color: red;" align="right">{{ share.updated }}</p>
+
+            <p align="left"> {% for tag in share.tags.all %} <a href="/tag/{{ tag }}">{{ tag }},</a> {% endfor %}
+                {{ share.body|safe }}
+        </div>
+    {% endfor %}
+
+    <div class=blog_overview align="center">
+        <h2>
+            {% if shares.has_previous %}
+                <a href="?page={{ shares.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            {{ shares.number }} / {{ shares.paginator.num_pages }}
+
+            {% if shares.has_next %}
+                <a href="?page={{ shares.next_page_number }}">Next</a>
+            {% endif %}
+        </h2>
+    </div>
+
+    <!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread" data-thread-key="share" data-title="TianJun's Share"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name: "tianjun"};
+        (function () {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = 'http://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+            || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- Duoshuo Comment END -->
+
+{% endblock %}

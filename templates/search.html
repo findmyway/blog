@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+{% block content %}
+    <br xmlns="http://www.w3.org/1999/html"/>
+    <h1 align=center>"<span style="color: red;">{{ tag }} </span>" in Essays:</h1>
+    <br/>
+    <hr>
+    <br/>
+    {% for blog in articles %}
+        <p>{{ blog.time|date:"Y-m-d"}} : <a
+                href="/essays/{{ blog.id }}">{{ blog.title }}</a></p>
+    {% endfor %}
+    <br/>
+    <br/>
+    <h1 align=center>"<span style="color:red;">{{ tag }}</span>" in Share:</h1>
+    <br/>
+    <hr>
+    <br/>
+
+    {% for share in shares %}
+        <div class="weibo">
+            <p>{{ share.time|date:"Y-m-d"}} </p>
+
+            <p>{{ share.body|safe }}</p>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+

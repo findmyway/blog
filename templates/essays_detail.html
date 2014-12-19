@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+
+{% block menu_essays %}
+    <li class="current"><a href="/">Essays</a></li>
+{% endblock %}
+
+{% block title %}
+    <title> {{ essay.title }} </title>
+{% endblock %}
+
+{% block content %}
+    <div class=blog>
+        <h2 align="center"><a href="/essays/{{ essay.id }}"> {{ essay.title }} </a></h2>
+
+        <div class=tags>
+            <p>Last update: <span style="color:#ff0000;"> {{ essay.updated|date:"Y-m-d H:i"}} </span></p>
+
+            <p>Posted on: <span style="color:#ff0000;"> {{ essay.time|date:"Y-m-d H:i"}} </span></p>
+
+            <p>Posted in : {% for tag in essay.tags.all %} <a href="/tag/{{ tag }}">{{ tag }},</a> {% endfor %}
+            </p>
+        </div>
+        <div class=blog_content>{{ essay.body|safe }}</div>
+    </div>
+
+
+    <!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread" data-thread-key="{{ essay.id }}" data-title="{{ essay.title }}"
+         data-url="http://www.tianjun.ml/essays/{{ essay.id }}"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name: "tianjun"};
+        (function () {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = 'http://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+            || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- Duoshuo Comment END -->
+{% endblock %}
+

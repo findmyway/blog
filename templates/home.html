@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+
+{% block sidebar_container %}
+
+{% endblock %}
+
+{% block menu_home %}
+    <li class="current"><a href="/home/">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <div id="smart-gallery">
+        {% for img in imgs %}
+            <a href="http://ontheroad.qiniudn.com/blog/resources/{{ img }}">
+                <img src="http://ontheroad.qiniudn.com/blog/resources/{{ img }}"/></a>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

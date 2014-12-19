@@ -1,0 +1,71 @@
+{% extends "index.html" %}
+
+{% block title %}
+    <title> About TianJun </title>
+{% endblock %}
+
+{% block menu_about %}
+    <li class="current"><a href="/about/">About</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="weibo">
+        <br/>
+
+        <h2>About Me</h2>
+        <hr/>
+        <br/>
+
+        <p>我是田俊，90s，2013年毕业于中南大学自动化专业，目前在自动化所。</p>
+
+        <p>比较喜欢new age 、post rock 风格的音乐</p>
+
+        <p>现在接触的包括：machine learning、data mining。当然，主业还是nlp这块了。 </p>
+        <br/>
+        <br/>
+
+        <h2>About This Site </h2>
+        <hr/>
+        <br/>
+
+        <p>想在这里写些东西，留下属于自己的回忆</p>
+
+        <p>阅读，思考，生活......</p>
+
+        <p>我会坚持每周在这里更新，努力做些事情，改变些东西</p>
+        <br/>
+        <br/>
+
+        <h2>Contact Me </h2>
+        <hr/>
+        <br/>
+
+        <p>E-mail: tianjun.cpp@gmail.com </p>
+
+        <p>Github: <a href=https://github.com/findmyway>github.com/findmyway</a></p>
+
+        <img src="http://ontheroad.qiniudn.com/4.jpg" width=500px>
+    </div>
+
+    <!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread" data-thread-key="about" data-title="About TianJun"
+         data-url="http://www.tianjun.ml/blog/about/"></div>
+
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name: "tianjun"};
+        (function () {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = 'http://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+            || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- Duoshuo Comment END -->
+
+
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+{% block menu_essays %}
+    <li class="current"><a href="/">Essays</a></li>
+{% endblock %}
+
+{% load process_img %}
+
+{% block content %}
+    {% for essay in onepage_essays %}
+        <div class=blog_overview>
+            <h2 align="center"><a href="/essays/{{ essay.id }}"> {{ essay.title }} </a></h2>
+
+            <div class=tags>
+                <p>Last update: <span style="color:#ff0000;"> {{ essay.updated|date:"Y-m-d H:i"}} </span></p>
+
+                <p>Posted on: <span style="color:#ff0000;"> {{ essay.time|date:"Y-m-d H:i"}} </span></p>
+
+                <p>Posted in : {% for tag in essay.tags.all %} <a href="/tag/{{ tag }}">{{ tag }},</a> {% endfor %}
+                </p>
+            </div>
+
+            <div class=blog_short>
+                {{ essay.body|extract_first_img|safe|truncatewords_html:40}}
+                {{ essay.body|remove_all_img|safe|truncatewords_html:40}}
+                {#                {{ essay.body|safe}}#}
+                <p align=center>
+                    <code>
+                        <a style="color:blue; text-align:center" href=
+                                "/essays/{{ essay.id }}"> --- Read More --- </a>
+                    </code>
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class=blog_overview align="center">
+        <h2>
+            {% if  onepage_essays.has_previous %}
+                <a href="?page={{ onepage_essays.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            {{ onepage_essays.number }} / {{ onepage_essays.paginator.num_pages }}
+
+            {% if onepage_essays.has_next %}
+                <a href="?page={{ onepage_essays.next_page_number }}">Next</a>
+            {% endif %}
+        </h2>
+    </div>
+
+{% endblock %}
