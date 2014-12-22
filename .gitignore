@@ -108,3 +108,6 @@ crashlytics-build.properties
 
 articles/migrations/*
 db.sqlite3
+static/
+blog/product_setting.py
+

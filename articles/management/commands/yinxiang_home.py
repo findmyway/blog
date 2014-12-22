@@ -11,7 +11,9 @@ from articles.models import Resources
 class Command(BaseCommand):
     target_book = settings.NOTEBOOK_HOME
     evernote_token = settings.EVERNOTE_TOKEN
-    client = EvernoteClient(token=evernote_token)
+    client = EvernoteClient(token=evernote_token,
+                            sandbox=False,
+                            service_host='app.yinxiang.com')
     noteStore = client.get_note_store()
     userStore = client.get_user_store()
     user_info = userStore.getPublicUserInfo('tianjun_cpp')

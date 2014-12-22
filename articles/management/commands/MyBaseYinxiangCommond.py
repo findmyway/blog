@@ -16,7 +16,9 @@ class MyCommand(BaseCommand):
     # local_type = Article # subclass fill this field
     evernote_token = settings.EVERNOTE_TOKEN
 
-    client = EvernoteClient(token=evernote_token)
+    client = EvernoteClient(token=evernote_token,
+                            sandbox=False,
+                            service_host='app.yinxiang.com')
     noteStore = client.get_note_store()
     userStore = client.get_user_store()
     user_info = userStore.getPublicUserInfo('tianjun_cpp')
@@ -93,18 +95,10 @@ class MyCommand(BaseCommand):
         def _get_filename(matched):
             original_hash = matched.group("hash")
             file_name = resource_dict.get(original_hash, original_hash)
-            if Resources.objects.get(hex_hash=original_hash).is_uploaded:
-                if matched.group("type") == "image":
-                    return '![' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + ')'
-                else:
-                    return '[' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + ')'
+            if matched.group("type") == "image":
+                return '![' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + ')'
             else:
-                res_url = "%sres/%s" % (self.user_info.webApiUrlPrefix,
-                                        Resources.objects.get(hex_hash=original_hash).evernote_guid)
-                if matched.group("type") == "image":
-                    return '![' + file_name + '](' + res_url + ')'
-                else:
-                    return '[' + file_name + '](' + res_url + ')'
+                return '[' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + ')'
 
         md_str = re.sub(r'<en-media.+?hash="(?P<hash>\w+)" type="(?P<type>\w+)/.+?</en-media>',
                         _get_filename,

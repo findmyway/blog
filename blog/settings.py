@@ -21,16 +21,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('BLOG_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-# TEMPLATE_DEBUG = True
+#DEBUG = True
+#TEMPLATE_DEBUG = True
 DEBUG = False
 TEMPLATE_DEBUG = False
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tianjun.ml','tianjun.me', '128.199.253.112']
 
 
 # Application definition
@@ -116,31 +115,4 @@ LOGGING = {
     }
 }
 
-# My Settings
-CRONJOBS = [
-    ('*/2 * * * *', 'django.core.management.call_command', ['yinxiang_articles']),
-    ('*/2 * * * *', 'django.core.management.call_command', ['yinxiang_home']),
-    ('*/2 * * * *', 'django.core.management.call_command', ['yinxiang_shares']),
-    ('*/2 * * * *', 'django.core.management.call_command', ['yinxiang_up_down_load_resources']),
-]
-
-# evernote part
-NOTEBOOK_ARTICLES = "blog_articles"
-NOTEBOOK_HOME = "blog_home"
-NOTEBOOK_SHARE = "blog_share"
-
-EVERNOTE_TOKEN = os.getenv('EVERNOTE_TOKEN')
-
-# qiniu part
-QINIU_ACCESS_KEY = os.getenv('QINIU_ACCESS_KEY')
-QINIU_SECRET_KEY = os.getenv('QINIU_SECRET_KEY')
-QINIU_PREFIX = 'blog/resources/'
-BUCKET_NAME = 'ontheroad'
-
-# where to store uploaded files
-RESOURCES_DIR = '/data/'
-
-# admin
-ADMINS = (
-    ('TianJun', 'tianjun.cpp@gmail.com'),
-)
+from product_setting import *

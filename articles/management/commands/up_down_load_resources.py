@@ -14,7 +14,9 @@ from articles.models import Resources
 
 class Command(BaseCommand):
     evernote_token = settings.EVERNOTE_TOKEN
-    client = EvernoteClient(token=evernote_token)
+    client = EvernoteClient(token=evernote_token,
+                            sandbox=False,
+                            service_host='app.yinxiang.com')
     noteStore = client.get_note_store()
     userStore = client.get_user_store()
     user_info = userStore.getPublicUserInfo('tianjun_cpp')
@@ -30,13 +32,13 @@ class Command(BaseCommand):
                 resp_build_hash = md5()
                 resp_build_hash.update(resp.content)
                 resp_hash = resp_build_hash.hexdigest()
-                self.stdout.write(resp_hash + "->" + r.hex_hash)
                 if resp_hash == r.hex_hash:
                     with open(settings.RESOURCES_DIR + r.file_name, 'wb') as f:
                         f.write(resp.content)
                     r.is_downloaded = True
                     r.save()
             except Exception, e:
+                # todo log error
                 self.stdout.write(e)
 
         for r in Resources.objects.filter(is_downloaded=True, is_uploaded=False):
@@ -45,12 +47,12 @@ class Command(BaseCommand):
                 ret, info = qiniu.put_file(qiniu_token, settings.QINIU_PREFIX + r.file_name,
                                            settings.RESOURCES_DIR + r.file_name,
                                            check_crc=True)
-                self.stdout.write(ret.get('hash', '') + "<-qn->" + etag(settings.RESOURCES_DIR + r.file_name))
                 if ret.get('hash', '') == etag(settings.RESOURCES_DIR + r.file_name):
                     r.is_uploaded = True
                     r.save()
             except Exception, e:
-                self.stdout.write(e)
+            # todo log error
+                pass
 
 
 
