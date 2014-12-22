@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import time
 import re
-
+import HTMLParser
 from django.conf import settings
 from evernote.api.client import EvernoteClient, NoteStore
 from django.core.management.base import BaseCommand
@@ -80,7 +80,9 @@ class MyCommand(BaseCommand):
                 if r.attributes.fileName:
                     resource_dict[hex_hash] = r.attributes.fileName
 
-        pre_processed = re.search(r'<en-note>(.+)</en-note>', note_detail.content)
+        html_parser = HTMLParser.HTMLParser()
+        note_content = html_parser.unescape(note_detail.content)
+        pre_processed = re.search(r'<en-note>(.+)</en-note>', note_content)
         if not pre_processed:
             return ""
 
@@ -89,14 +91,14 @@ class MyCommand(BaseCommand):
             .replace('<br clear="none"/>', '\n') \
             .replace('<div>', '') \
             .replace('</div>', '\n')
-        post_process = unicode(post_process, 'utf-8')
+        # post_process = unicode(post_process, 'utf-8')
 
 
         def _get_filename(matched):
             original_hash = matched.group("hash")
             file_name = resource_dict.get(original_hash, original_hash)
             if matched.group("type") == "image":
-                return '![' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + ')'
+                return '![' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + '/w660)'
             else:
                 return '[' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + ')'
 

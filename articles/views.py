@@ -110,3 +110,7 @@ def search(request):
                'articles': articles}
     return render(request, 'search.html', context)
 
+def projects(request):
+    articles = Article.objects.all().order_by('-time')
+    context = {'articles': articles}
+    return render(request, 'projects.html')

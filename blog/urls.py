@@ -16,5 +16,6 @@ urlpatterns = patterns('',
                        url(r'^share/$', 'articles.views.share'),
                        url(r'^about/$', 'articles.views.about'),
                        url(r'^search/$', 'articles.views.search'),
+                       url(r'^projects/$', 'articles.views.projects'),
                        url(r'^tag/(?P<tag>\w+)$', 'articles.views.tag_search'),
 )
