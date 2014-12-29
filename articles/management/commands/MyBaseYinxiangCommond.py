@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import time
+import datetime
 import re
 import HTMLParser
 from django.conf import settings
 from evernote.api.client import EvernoteClient, NoteStore
 from django.core.management.base import BaseCommand
+from django.utils.timezone import get_default_timezone, utc
 import requests
 
 from articles.models import Resources
@@ -32,7 +34,11 @@ class MyCommand(BaseCommand):
         articles_need_create = []
         for article in remote_articles:
             if local_articles_info.get(article.guid, None):
-                if local_articles_info[article.guid] < (article.updated / 1000):
+                remote_time = datetime.datetime.utcfromtimestamp(article.updated / 1000)
+                remote_time = remote_time.replace(tzinfo=utc)
+                local_time = local_articles_info[article.guid]
+                time_diff = remote_time-local_time
+                if time_diff.total_seconds() > 0:
                     articles_need_update.append(article)
             else:
                 articles_need_create.append(article)
@@ -43,7 +49,7 @@ class MyCommand(BaseCommand):
 
     def get_local_articles_updated_time(self):
         all_articles = self.local_type.objects.all()
-        return {x.evernote_guid: long(time.mktime(x.updated.timetuple()))
+        return {x.evernote_guid: x.updated
                 for x in all_articles}
 
 
@@ -81,8 +87,8 @@ class MyCommand(BaseCommand):
                     resource_dict[hex_hash] = r.attributes.fileName
 
         html_parser = HTMLParser.HTMLParser()
-        note_content = html_parser.unescape(note_detail.content)
-        pre_processed = re.search(r'<en-note>(.+)</en-note>', note_content)
+        note_content = html_parser.unescape(unicode(note_detail.content, 'utf-8'))
+        pre_processed = re.search(r'<en-note.*?>(.+)</en-note>', note_content)
         if not pre_processed:
             return ""
 

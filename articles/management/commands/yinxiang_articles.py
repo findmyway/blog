@@ -37,4 +37,4 @@ class Command(MyCommand):
 
             article.save()
             if note_tags:
-                article.tags.add(*note_tags)
+                article.tags.set(*note_tags)
