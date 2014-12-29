@@ -16,7 +16,7 @@ class Article(models.Model):
     updated = models.DateTimeField(blank=True, null=True)
     evernote_guid = models.TextField(blank=True, null=True)
 
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def __unicode__(self):
         return smart_unicode(self.title)
@@ -31,7 +31,7 @@ class Share(models.Model):
     body = models.TextField()
     updated = models.DateTimeField(blank=True, null=True)
     evernote_guid = models.TextField(blank=True, null=True)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def __unicode__(self):
         return smart_unicode(self.body)
