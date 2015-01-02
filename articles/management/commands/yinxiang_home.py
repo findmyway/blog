@@ -4,7 +4,7 @@
 from evernote.api.client import EvernoteClient, NoteStore
 from django.core.management.base import BaseCommand
 from django.conf import settings
-
+import time
 from articles.models import Resources
 
 
@@ -19,6 +19,7 @@ class Command(BaseCommand):
     user_info = userStore.getPublicUserInfo('tianjun_cpp')
 
     def handle(self, *args, **options):
+        print('+++++++++' + time.ctime() + '+++++++++++')
         local_show_imgs = {x.evernote_guid: x
                            for x in Resources.objects.filter()}
         remote_show_imgs = self.get_remote_show_imgs()
@@ -28,12 +29,16 @@ class Command(BaseCommand):
                 r.is_show = True
                 r.save()
             else:
+                res_hex_hash = ''.join(["%02X" % (ord(x)) for x in res.data.bodyHash]).lower()
+                file_name = unicode(res.attributes.fileName, 'utf-8')
                 r = Resources(evernote_guid=res.guid,
-                              file_name=res.attributes.fileName,
-                              hex_hash=''.join(["%02X" % (ord(x)) for x in res.data.bodyHash]).lower(),
+                              file_name=file_name + '_' + res_hex_hash,
+                              hex_hash=res_hex_hash,
                               is_show=True
                 )
                 r.save()
+
+        self.stdout.write("SUCCESS!")
 
     def get_remote_show_imgs(self):
         notebooks = self.noteStore.listNotebooks()

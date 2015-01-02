@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+from django.core.management import call_command
 
 from django.shortcuts import render
 from django.http import Http404
@@ -84,6 +85,12 @@ def tag_search(request, tag):
     article_list = Article.objects.all().order_by("-time")
     articles = Article.objects.filter(tags__name=tag)
     shares = Share.objects.filter(tags__name=tag)
+    for s in shares:
+        s.body = markdown(s.body,
+                          extensions=['codehilite'],
+                          extension_configs={'codehilite': [('linenums', True),
+                                                            ('noclasses', True),
+                                                            ('pygments_style', 'native')]})
     context = {'all_essays': article_list,
                'articles': articles,
                'shares': shares,
@@ -92,7 +99,8 @@ def tag_search(request, tag):
 
 
 def home(request):
-    imgs = Resources.objects.filter(is_show=True)
+    imgs = Resources.objects.filter(is_show=True, is_uploaded=True)
+    imgs = [x.file_name for x in imgs]
     imgs_show = []
     for i in range(3):
         imgs_show.append(random.choice(imgs))

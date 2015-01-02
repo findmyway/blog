@@ -16,10 +16,8 @@ class Command(MyCommand):
 
         for note in notes:
             note_detail = self.noteStore.getNote(self.evernote_token, note.guid, True, False, False, False)
-            print(note_detail.content)
-            print(update_type, '-------------')
+            print(update_type, '------share-------')
             note_content_md = self.mark_down(note_detail)
-            print(note_content_md)
             note_tags = self.noteStore.getNoteTagNames(self.evernote_token, note_detail.guid)
 
             if update_type == 'create':
@@ -36,5 +34,4 @@ class Command(MyCommand):
                                                 time.localtime(note_detail.updated / 1000))
             article.save()
 
-            if note_tags:
-                article.tags.set(*note_tags)
+            article.tags.set(*note_tags)

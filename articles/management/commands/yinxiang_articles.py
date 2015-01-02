@@ -15,6 +15,7 @@ class Command(MyCommand):
     def update_articles(self, notes, update_type):
 
         for note in notes:
+            print(update_type, '------article-------')
             note_detail = self.noteStore.getNote(self.evernote_token, note.guid, True, False, False, False)
             note_content_md = self.mark_down(note_detail)
             note_tags = self.noteStore.getNoteTagNames(self.evernote_token, note_detail.guid)
@@ -36,5 +37,4 @@ class Command(MyCommand):
                                                 time.localtime(note_detail.updated / 1000))
 
             article.save()
-            if note_tags:
-                article.tags.set(*note_tags)
+            article.tags.set(*note_tags)

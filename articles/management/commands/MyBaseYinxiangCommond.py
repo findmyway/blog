@@ -28,6 +28,7 @@ class MyCommand(BaseCommand):
 
     def handle(self, *args, **options):
         # check update time, collect articles need update
+        print('+++++++++' + time.ctime() + '+++++++++++')
         local_articles_info = self.get_local_articles_updated_time()
         remote_articles = self.get_evernote_articles_updated_time()
         articles_need_update = []
@@ -96,21 +97,29 @@ class MyCommand(BaseCommand):
             .replace('<div><br clear="none"/></div>', '\n') \
             .replace('<br clear="none"/>', '\n') \
             .replace('<div>', '') \
-            .replace('</div>', '\n')
+            .replace('</div>', '\n') \
+            .replace('<br/>', '\n')
         # post_process = unicode(post_process, 'utf-8')
 
 
         def _get_filename(matched):
             original_hash = matched.group("hash")
             file_name = resource_dict.get(original_hash, original_hash)
+            file_name = unicode(file_name, 'utf-8')
+            file_name = file_name + '_' + original_hash
+
             if matched.group("type") == "image":
                 return '![' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + '/w660)'
             else:
                 return '[' + file_name + '](http://ontheroad.qiniudn.com/blog/resources/' + file_name + ')'
 
-        md_str = re.sub(r'<en-media.+?hash="(?P<hash>\w+)" type="(?P<type>\w+)/.+?</en-media>',
+        md_str_old = re.sub(r'<en-media.+?hash="(?P<hash>\w+)" type="(?P<type>\w+)/.+?</en-media>',
                         _get_filename,
                         post_process)
+
+        md_str = re.sub(r'<en-media.+?hash="(?P<hash>\w+)" type="(?P<type>\w+)/.+?/>',
+                        _get_filename,
+                        md_str_old)
 
         def _get_gist_link(matched):
             link = matched.group("link")
@@ -129,12 +138,19 @@ class MyCommand(BaseCommand):
     def process_resource(self, resource):
         hex_hash = ''.join(["%02X" % (ord(x)) for x in resource.data.bodyHash]).lower()
         file_name = resource.attributes.fileName
+        file_name = unicode(file_name, 'utf-8')
         evernote_guid = resource.guid
 
         resources = Resources.objects.filter(evernote_guid=evernote_guid)
         if not resources:
             r = Resources(hex_hash=hex_hash,
                           evernote_guid=evernote_guid,
-                          file_name=file_name)
+                          file_name=file_name+'_'+hex_hash)
             r.save()
-
+        else:
+            r = resources[0]
+            r.hex_hash = hex_hash
+            r.file_name = file_name+'_'+hex_hash
+            r.is_downloaded = False
+            r.is_uploaded = False
+            r.save()

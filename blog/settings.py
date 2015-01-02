@@ -43,8 +43,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'articles',
     'taggit',
-    'django_crontab',
-
 )
 
 MIDDLEWARE_CLASSES = (
