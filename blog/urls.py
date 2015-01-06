@@ -3,6 +3,7 @@
 
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from articles.models import BlogFeed
 
 urlpatterns = patterns('',
                        # Examples:
@@ -18,4 +19,5 @@ urlpatterns = patterns('',
                        url(r'^search/$', 'articles.views.search'),
                        url(r'^projects/$', 'articles.views.projects'),
                        url(r'^tag/(?P<tag>\w+)$', 'articles.views.tag_search'),
+                       url(r'^blog/feed/$', BlogFeed()),
 )

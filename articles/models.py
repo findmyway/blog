@@ -4,7 +4,8 @@
 from django.utils.encoding import smart_unicode
 from django.contrib import admin
 from django.db import models
-
+from django.contrib.syndication.views import Feed
+from markdown import markdown
 from taggit.managers import TaggableManager
 
 
@@ -56,4 +57,27 @@ class Resources(models.Model):
 
 class ResourcesAdmin(admin.ModelAdmin):
     list_display = ['file_name', 'is_show', 'is_downloaded', 'is_uploaded']
+
+
+class BlogFeed(Feed):
+    title = "TianJun . Machine Learning"
+    description = u"自由~ 分享~~ 交流~~~"
+    link = "http://www.tianjun.ml/blog/feed/"
+    item_author_name = u'田俊'
+
+    def items(self):
+        return Article.objects.all().order_by("-updated")
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return markdown(item.body,
+                        extensions=['codehilite'],
+                        extension_configs={'codehilite': [('linenums', True),
+                                                          ('noclasses', True),
+                                                          ('pygments_style', 'native')]})
+
+    def item_link(self, item):
+        return u"http://tianjun.ml/essays/%d" % item.id
 
