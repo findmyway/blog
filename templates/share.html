@@ -22,7 +22,7 @@
 
     {% for share in shares %}
         <div class="weibo">
-            <p style="color: red;" align="right">{{ share.time}}</p>
+            <p style="color: red;" align="right">{{ share.updated }}</p>
 
             <p align="left"> {% for tag in share.tags.all %} <a href="/tag/{{ tag }}">{{ tag }},</a> {% endfor %}
                 {{ share.body|safe }}

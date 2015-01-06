@@ -59,7 +59,7 @@ def about(request):
 
 
 def share(request):
-    shares = Share.objects.all().order_by("-time")
+    shares = Share.objects.all().order_by("-updated")
     paginator = Paginator(shares, 5)
     page = request.GET.get('page')
     try:
